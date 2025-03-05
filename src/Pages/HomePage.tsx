@@ -20,20 +20,22 @@ const HomePage = () => {
   return (
     <div className="h-screen p-4 md:p-8 flex items-center justify-center">
       {isLargeScreen ? (
-        <TiltedCard
-          imageSrc="../../public/toonya.jpg"
-          altText=""
-          captionText="Saurabh"
-          containerHeight="95vh"
-          containerWidth="95vw"
-          imageHeight="96vh"
-          imageWidth="96vw"
-          rotateAmplitude={2}
-          scaleOnHover={1}
-          showMobileWarning={false}
-          showTooltip={false}
-          displayOverlayContent={true}
-        />
+        <>
+          <TiltedCard
+            imageSrc="../../public/toonya.jpg"
+            altText=""
+            captionText="Saurabh"
+            containerHeight="95vh"
+            containerWidth="95vw"
+            imageHeight="96vh"
+            imageWidth="96vw"
+            rotateAmplitude={2}
+            scaleOnHover={1}
+            showMobileWarning={false}
+            showTooltip={false}
+            displayOverlayContent={true}
+          />
+        </>
       ) : (
         <div
           className="relative w-full h-full shadow-xl shadow-sky-200 

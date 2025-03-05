@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 
 interface BlurredFooterProps {
-  text: string;
   className?: string;
 }
 

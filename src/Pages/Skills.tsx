@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { FaReact } from "react-icons/fa";
 import {
   SiTailwindcss,
@@ -11,7 +11,7 @@ import { MdSpeed } from "react-icons/md";
 import RotatingText from "../Components/RotatingText";
 import { DiResponsive } from "react-icons/di";
 
-const skills = [
+const skills: { text: string; icon: JSX.Element }[] = [
   {
     text: "JavaScript",
     icon: <SiJavascript className="ml-2 text-yellow-500" />,

@@ -1972,6 +1972,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-text-encoding@npm:^1.0.2":
+  version: 1.0.6
+  resolution: "fast-text-encoding@npm:1.0.6"
+  checksum: 10c0/e1d0381bda229c92c7906f63308f3b9caca8c78b732768b1ee16f560089ed21bc159bbe1434138ccd3815931ec8d4785bdade1ad1c45accfdf27ac6606ac67d2
+  languageName: node
+  linkType: hard
+
 "fastq@npm:^1.6.0":
   version: 1.19.1
   resolution: "fastq@npm:1.19.1"
@@ -2298,6 +2305,15 @@ __metadata:
   version: 0.1.4
   resolution: "imurmurhash@npm:0.1.4"
   checksum: 10c0/8b51313850dd33605c6c9d3fd9638b714f4c4c40250cff658209f30d40da60f78992fb2df5dabee4acf589a6a82bbc79ad5486550754bd9ec4e3fc0d4a57d6a6
+  languageName: node
+  linkType: hard
+
+"intl-segmenter-polyfill@npm:^0.4.4":
+  version: 0.4.4
+  resolution: "intl-segmenter-polyfill@npm:0.4.4"
+  dependencies:
+    fast-text-encoding: "npm:^1.0.2"
+  checksum: 10c0/1539bcca40063f32a88ecfc6b526b466cd125306cf5cb26abc149ff05e9ab25d6613921eab7f268bfeeeb397b616dab857a250b43b3bb87621a5d09709ea7b8a
   languageName: node
   linkType: hard
 
@@ -2991,6 +3007,7 @@ __metadata:
     framer-motion: "npm:^12.4.10"
     globals: "npm:^15.15.0"
     gsap: "npm:^3.12.7"
+    intl-segmenter-polyfill: "npm:^0.4.4"
     ogl: "npm:^1.0.11"
     postcss: "npm:^8.5.3"
     postprocessing: "npm:^6.37.0"

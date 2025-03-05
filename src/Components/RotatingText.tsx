@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { motion, AnimatePresence, Transition } from "framer-motion";
+import 'intl-segmenter-polyfill';
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -89,7 +90,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
 
       if (splitBy === "characters") {
         return {
-          words: currentText.split(" ").map((word, i) => ({
+          words: currentText.split(" ").map((word: string, i) => ({
             characters: splitIntoCharacters(word),
             needsSpace: i !== currentText.split(" ").length - 1,
           })),
@@ -98,7 +99,7 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
       }
 
       return {
-        words: currentText.split(" ").map((word, i) => ({
+        words: currentText.split(" ").map((word: string, i) => ({
           characters: [word],
           needsSpace: i !== currentText.split(" ").length - 1,
         })),

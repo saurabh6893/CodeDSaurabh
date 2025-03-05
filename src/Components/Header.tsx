@@ -1,4 +1,3 @@
-import React from "react";
 import "remixicon/fonts/remixicon.css";
 import ShapeBlur from "./ShapeBlur";
 

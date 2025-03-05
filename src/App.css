@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dhurjati&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Langar&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Galada&family=Langar&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ewert&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Sancreek&display=swap');
+.rye-regular {
+  font-family: "Rye", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-bodoni {
+  font-family: "Bodoni Moda SC", serif !important;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.texturina-alpha {
+  font-family: "Texturina", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+#section2 {
+  position: relative;
+  perspective: 3000px;
+}
+
+.rotateText {
+  transform-origin: 50% 50%;
+}
+
+p {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ewert-regular {
+  font-family: "Ewert", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.sancreek-regular {
+  font-family: "Sancreek", serif;
+  font-weight: 400;
+  font-style: normal;
+}

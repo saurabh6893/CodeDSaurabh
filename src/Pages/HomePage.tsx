@@ -22,7 +22,7 @@ const HomePage = () => {
       {isLargeScreen ? (
         <>
           <TiltedCard
-            imageSrc="../../public/toonya.jpg"
+            imageSrc="toonya.jpg"
             altText=""
             captionText="Saurabh"
             containerHeight="95vh"

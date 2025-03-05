@@ -1,5 +1,6 @@
-import React, {
+import {
   forwardRef,
+  JSX,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -7,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { motion, AnimatePresence, Transition } from "framer-motion";
-import 'intl-segmenter-polyfill';
+import "intl-segmenter-polyfill";
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -25,7 +26,7 @@ export interface RotatingTextProps
     React.ComponentPropsWithoutRef<typeof motion.span>,
     "children" | "transition" | "initial" | "animate" | "exit"
   > {
-  texts: string[];
+  texts: (string | { text: string; icon?: JSX.Element })[];
   transition?: Transition;
   initial?: any;
   animate?: any;
@@ -47,7 +48,7 @@ export interface RotatingTextProps
 const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
   (
     {
-      texts,
+      texts = [],
       transition = { type: "spring", damping: 25, stiffness: 300 },
       initial = { y: "100%", opacity: 0 },
       animate = { y: 0, opacity: 1 },
@@ -68,134 +69,99 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
     },
     ref
   ) => {
+    if (!Array.isArray(texts)) {
+      console.error(
+        "❌ RotatingText expects 'texts' to be an array of strings or objects."
+      );
+      return null;
+    }
+
     const [currentTextIndex, setCurrentTextIndex] = useState<number>(0);
 
+    // 🔹 Move to next text
+    const next = useCallback(() => {
+      setCurrentTextIndex((prevIndex) => {
+        const newIndex =
+          prevIndex + 1 >= texts.length
+            ? loop
+              ? 0
+              : prevIndex
+            : prevIndex + 1;
+        onNext?.(newIndex);
+        return newIndex;
+      });
+    }, [texts.length, loop, onNext]);
+
+    // 🔹 Move to previous text
+    const previous = useCallback(() => {
+      setCurrentTextIndex((prevIndex) =>
+        prevIndex - 1 < 0
+          ? loop
+            ? texts.length - 1
+            : prevIndex
+          : prevIndex - 1
+      );
+    }, [texts.length, loop]);
+
+    // 🔹 Jump to a specific text index
+    const jumpTo = useCallback(
+      (index: number) => {
+        if (index >= 0 && index < texts.length) {
+          setCurrentTextIndex(index);
+        }
+      },
+      [texts.length]
+    );
+
+    // 🔹 Reset to first text
+    const reset = useCallback(() => {
+      setCurrentTextIndex(0);
+    }, []);
+
+    // 🔹 Handle automatic rotation if `auto` is true
+    useEffect(() => {
+      if (!auto) return;
+      const interval = setInterval(() => next(), rotationInterval);
+      return () => clearInterval(interval);
+    }, [auto, next, rotationInterval]);
+
+    useImperativeHandle(ref, () => ({ next, previous, jumpTo, reset }));
+
+    // Extract text and icon safely
+    const currentItem = texts[currentTextIndex];
+    const currentText =
+      typeof currentItem === "string" ? currentItem : currentItem.text;
+    const currentIcon =
+      typeof currentItem === "object" && currentItem.icon
+        ? currentItem.icon
+        : null;
+
+    // Function to split text safely
     const splitIntoCharacters = (text: string): string[] => {
-      if (typeof Intl !== "undefined" && Intl.Segmenter) {
-        const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
+      if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+        const segmenter = new (Intl as any).Segmenter("en", {
+          granularity: "grapheme",
+        });
         return Array.from(
           segmenter.segment(text),
-          (segment) => segment.segment
+          (segment: any) => segment.segment
         );
       }
       return Array.from(text);
     };
 
     const elements = useMemo(() => {
-      const currentSkill = texts[currentTextIndex];
-      const currentText =
-        typeof currentSkill === "string" ? currentSkill : currentSkill.text;
-      const currentIcon =
-        typeof currentSkill === "string" ? null : currentSkill.icon;
-
-      if (splitBy === "characters") {
-        return {
-          words: currentText.split(" ").map((word: string, i) => ({
-            characters: splitIntoCharacters(word),
-            needsSpace: i !== currentText.split(" ").length - 1,
-          })),
-          icon: currentIcon,
-        };
-      }
-
       return {
-        words: currentText.split(" ").map((word: string, i) => ({
-          characters: [word],
+        words: currentText.split(" ").map((word, i) => ({
+          characters:
+            splitBy === "characters" ? splitIntoCharacters(word) : [word],
           needsSpace: i !== currentText.split(" ").length - 1,
         })),
-        icon: currentIcon,
       };
-    }, [texts, currentTextIndex, splitBy]);
-
-    const getStaggerDelay = useCallback(
-      (index: number, totalChars: number): number => {
-        const total = totalChars;
-        if (staggerFrom === "first") return index * staggerDuration;
-        if (staggerFrom === "last")
-          return (total - 1 - index) * staggerDuration;
-        if (staggerFrom === "center") {
-          const center = Math.floor(total / 2);
-          return Math.abs(center - index) * staggerDuration;
-        }
-        if (staggerFrom === "random") {
-          const randomIndex = Math.floor(Math.random() * total);
-          return Math.abs(randomIndex - index) * staggerDuration;
-        }
-        return Math.abs((staggerFrom as number) - index) * staggerDuration;
-      },
-      [staggerFrom, staggerDuration]
-    );
-
-    const handleIndexChange = useCallback(
-      (newIndex: number) => {
-        setCurrentTextIndex(newIndex);
-        if (onNext) onNext(newIndex);
-      },
-      [onNext]
-    );
-
-    const next = useCallback(() => {
-      const nextIndex =
-        currentTextIndex === texts.length - 1
-          ? loop
-            ? 0
-            : currentTextIndex
-          : currentTextIndex + 1;
-      if (nextIndex !== currentTextIndex) {
-        handleIndexChange(nextIndex);
-      }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange]);
-
-    const previous = useCallback(() => {
-      const prevIndex =
-        currentTextIndex === 0
-          ? loop
-            ? texts.length - 1
-            : currentTextIndex
-          : currentTextIndex - 1;
-      if (prevIndex !== currentTextIndex) {
-        handleIndexChange(prevIndex);
-      }
-    }, [currentTextIndex, texts.length, loop, handleIndexChange]);
-
-    const jumpTo = useCallback(
-      (index: number) => {
-        const validIndex = Math.max(0, Math.min(index, texts.length - 1));
-        if (validIndex !== currentTextIndex) {
-          handleIndexChange(validIndex);
-        }
-      },
-      [texts.length, currentTextIndex, handleIndexChange]
-    );
-
-    const reset = useCallback(() => {
-      if (currentTextIndex !== 0) {
-        handleIndexChange(0);
-      }
-    }, [currentTextIndex, handleIndexChange]);
-
-    useImperativeHandle(
-      ref,
-      () => ({
-        next,
-        previous,
-        jumpTo,
-        reset,
-      }),
-      [next, previous, jumpTo, reset]
-    );
-
-    useEffect(() => {
-      if (!auto) return;
-      const intervalId = setInterval(next, rotationInterval);
-      return () => clearInterval(intervalId);
-    }, [next, rotationInterval, auto]);
+    }, [currentText, splitBy]);
 
     return (
-      <motion.span
-        className={cn("flex items-center flex-wrap relative", mainClassName)}
-        {...rest}
-      >
+      <motion.span className={cn("flex items-center", mainClassName)} {...rest}>
         <AnimatePresence
           mode={animatePresenceMode}
           initial={animatePresenceInitial}
@@ -204,7 +170,6 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
             key={currentTextIndex}
             className="flex items-center"
             layout
-            aria-hidden="true"
           >
             {elements.words.map((wordObj, wordIndex) => (
               <span
@@ -228,17 +193,8 @@ const RotatingText = forwardRef<RotatingTextRef, RotatingTextProps>(
                 )}
               </span>
             ))}
-            {elements.icon && (
-              <motion.span
-                className="ml-2"
-                initial={initial}
-                animate={animate}
-                exit={exit}
-                transition={transition}
-              >
-                {elements.icon}
-              </motion.span>
-            )}
+            {/* Render the icon next to the text */}
+            {currentIcon && <span className="ml-2">{currentIcon}</span>}
           </motion.div>
         </AnimatePresence>
       </motion.span>

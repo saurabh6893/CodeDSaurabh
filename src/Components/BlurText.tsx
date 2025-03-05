@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { useSprings, animated, SpringValue } from "@react-spring/web";
+import { useSprings, animated, SpringValue, AnimatedProps } from "@react-spring/web";
 
 interface BlurTextProps {
   text?: string;
@@ -11,7 +11,7 @@ interface BlurTextProps {
   rootMargin?: string;
   animationFrom?: Record<string, any>;
   animationTo?: Record<string, any>[];
-  easing?: (t: number) => number | string;
+  easing?: ((t: number) => number) | string;
   onAnimationComplete?: () => void;
 }
 
@@ -28,7 +28,9 @@ const BlurText: React.FC<BlurTextProps> = ({
   easing = "easeOutCubic",
   onAnimationComplete,
 }) => {
-  const elements = animateBy === "words" ? text.split(" ") : text.split("");
+  const elements = (
+    animateBy === "words" ? text.split(" ") : text.split("")
+  ).filter(Boolean);
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
   const animatedCount = useRef(0);
@@ -98,20 +100,20 @@ const BlurText: React.FC<BlurTextProps> = ({
           }
         : animationFrom || defaultFrom,
       delay: i * delay,
-      config: { easing: easing as any },
+      config: { easing: typeof easing === "function" ? easing : undefined },
     }))
   );
 
   return (
     <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {springs.map((props, index) => (
+        // @ts-ignore
         <animated.span
           key={index}
-          style={props}
+          style={props as AnimatedProps<React.CSSProperties>}
           className="inline-block transition-transform will-change-[transform,filter,opacity]"
         >
-          {elements[index] === " " ? "\u00A0" : elements[index]}
-          {animateBy === "words" && index < elements.length - 1 && "\u00A0"}
+          {elements[index] || ""}
         </animated.span>
       ))}
     </p>

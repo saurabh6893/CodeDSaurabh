@@ -5,7 +5,6 @@ import InstagramIcon from "../assets/icons8-instagram-100.svg";
 import EmailIcon from "../assets/email-1-svgrepo-com.svg";
 import LinkedinIcon from "../assets/linkedin-161-svgrepo-com.svg";
 import ResumeIcon from "../assets/old-man-svgrepo-com.svg";
-import RotatingText from "../Components/RotatingText";
 
 const IntroSection = () => {
   gsap.registerPlugin(ScrollTrigger);
@@ -111,26 +110,3 @@ const IntroSection = () => {
 
 export default IntroSection;
 
-{
-  /* <RotatingText
-texts={[
-  "JavaScript",
-  "React",
-  "Responsive Design",
-  "Git & GitHub",
-  "TypeScript",
-  "playwright",
-  "TailwindCss",
-  "Performance Optimization",
-]}
-mainClassName="introText inline-flex font-Dhurjati text-3xl w-full sm:px-2 md:px-3 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
-staggerFrom={"last"}
-initial={{ y: "100%" }}
-animate={{ y: 0 }}
-exit={{ y: "-120%" }}
-staggerDuration={0.025}
-splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-transition={{ type: "spring", damping: 30, stiffness: 400 }}
-rotationInterval={2000}
-/> */
-}

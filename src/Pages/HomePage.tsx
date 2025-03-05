@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import HomePageBottom from "../Components/HomePageBottom";
 import DecryptedText from "../Components/DecryptedText";
 import TiltedCard from "../Components/TiltedCard";

@@ -10,13 +10,14 @@ const KeywordsPage = () => {
 
     mm.add("(min-width: 768px)", () => {
       gsap.utils.toArray(".rotateText").forEach((el, index) => {
-        gsap.from(el, {
+        const target = el as HTMLElement;
+        gsap.from(target , {
           transform: "rotateX(-180deg) rotateY(-85deg) scale(0.8)",
           opacity: 0,
           duration: 1,
           delay: index * 0.2,
           scrollTrigger: {
-            trigger: el,
+            trigger: target,
             start: "top 90%",
             end: "top -20%",
             scrub: true,
@@ -27,13 +28,14 @@ const KeywordsPage = () => {
 
     mm.add("(max-width: 767px)", () => {
       gsap.utils.toArray(".rotateText").forEach((el, index) => {
-        gsap.from(el, {
+        const target = el as HTMLElement;
+        gsap.from(target , {
           transform: "rotateX(-90deg) scale(0.9)",
           opacity: 0,
           duration: 1,
           delay: index * 0.3,
           scrollTrigger: {
-            trigger: el,
+            trigger: target,
             start: "top 80%",
             end: "top 10%",
             scrub: true,

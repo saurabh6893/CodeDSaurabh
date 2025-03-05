@@ -1,5 +1,4 @@
 import "remixicon/fonts/remixicon.css";
-import ShapeBlur from "./ShapeBlur";
 
 const Header = () => {
   return (

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HomePageBottom from "../Components/HomePageBottom";
 import DecryptedText from "../Components/DecryptedText";
 import TiltedCard from "../Components/TiltedCard";
+import TextPressure from "../Components/TextPressure";
 
 const HomePage = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -45,20 +46,23 @@ const HomePage = () => {
       )}
 
       <div
-        className="absolute top-[60%] right-[5%] 
+        className="absolute top-[60%] right-[5%]
         bg-white/20 bg-opacity-30 backdrop-blur-md 
         md:top-[45%] md:right-[15%] md:bg-white/20 md:backdrop-blur-lg 
         lg:top-[50%] lg:right-[10%] lg:bg-transparent lg:backdrop-blur-0
         xl:top-[20%] xl:right-[2%] xl:bg-transparent xl:backdrop-blur-0"
       >
-        <DecryptedText
-          text="Code-D-Saurabh"
-          speed={100}
-          maxIterations={20}
-          characters="ABCD1234!?"
-          className="revealed font-Sancreek text-5xl md:text-8xl lg:text-9xl"
-          parentClassName="all-letters"
-          encryptedClassName="encrypted font-Sancreek text-5xl md:text-8xl lg:text-9xl"
+        <TextPressure
+          text="Saurabh"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
         />
       </div>
 

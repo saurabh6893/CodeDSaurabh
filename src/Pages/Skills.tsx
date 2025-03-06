@@ -38,7 +38,6 @@ const skills: { text: string; icon: JSX.Element }[] = [
 const Skills = () => {
   return (
     <section className="relative w-full h-[40vh] bg-[#fdf0d5] flex flex-col justify-center items-center text-center px-4">
-      <h1 className="absolute top-10">My Skill Stack</h1>
       <RotatingText
         texts={skills}
         mainClassName="introText inline-flex items-center font-Galada text-2xl md:text-6xl lg:text-8xl w-full sm:px-2 md:px-3 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"

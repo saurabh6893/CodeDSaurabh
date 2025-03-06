@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import HomePageBottom from "../Components/HomePageBottom";
-import DecryptedText from "../Components/DecryptedText";
 import TiltedCard from "../Components/TiltedCard";
 import TextPressure from "../Components/TextPressure";
 

@@ -96,7 +96,7 @@ const IntroSection = () => {
             className="w-12 h-12 md:w-14 md:h-14 hover:scale-110 transition-transform duration-300"
           />
         </a>
-        <a href="https://saurabh6893.github.io/Resume/">
+        <a>
           <img
             src={ResumeIcon}
             alt="Resume"
@@ -109,4 +109,3 @@ const IntroSection = () => {
 };
 
 export default IntroSection;
-

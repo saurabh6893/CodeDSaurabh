@@ -74,8 +74,7 @@ const IntroSection = () => {
         <a
           href="https://www.instagram.com/getsaurabh?igsh=MXJzdm1wNnNoemIxOQ=="
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           <img
             src={InstagramIcon}
             alt="Instagram"
@@ -96,7 +95,7 @@ const IntroSection = () => {
             className="w-12 h-12 md:w-14 md:h-14 hover:scale-110 transition-transform duration-300"
           />
         </a>
-        <a>
+        <a href="https://saurabh6893.github.io/Resume/">
           <img
             src={ResumeIcon}
             alt="Resume"

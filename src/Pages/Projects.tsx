@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import gsap from "gsap";
+import { useState } from "react";
 
 const projects = [
   {

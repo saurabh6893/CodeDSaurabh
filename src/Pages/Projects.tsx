@@ -68,28 +68,19 @@ const projects: Project[] = [
 
 const Projects = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentProject = projects[currentIndex];
   const [imageIndex, setImageIndex] = useState(0);
-  const cardContainerRef = useRef<(HTMLDivElement | null)[]>([]);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize ref array
-  useEffect(() => {
-    cardContainerRef.current = cardContainerRef.current.slice(
-      0,
-      projects.length
-    );
-  }, []);
+  const currentProject = projects[currentIndex];
 
   useEffect(() => {
-    cardContainerRef.current.forEach((card, index) => {
-      if (card) {
-        gsap.fromTo(
-          card,
-          { opacity: 0, x: index === currentIndex ? "100%" : "0%" },
-          { opacity: index === currentIndex ? 1 : 0, x: "0%", duration: 0.5 }
-        );
-      }
-    });
+    if (cardRef.current) {
+      gsap.fromTo(
+        cardRef.current,
+        { opacity: 0, x: 40 },
+        { opacity: 1, x: 0, duration: 0.5 }
+      );
+    }
   }, [currentIndex]);
 
   const nextProject = () => {
@@ -119,77 +110,89 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-800 via-gray-900 to-black flex flex-col items-center justify-center text-white px-4">
-      <h1 className="text-5xl font-bold mb-8">Projects</h1>
-
-      <div className="relative w-3/4 max-w-[1200px] h-[480px]">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            ref={(el) => {
-              if (el) {
-                cardContainerRef.current[index] = el;
-              }
-            }}
-            className={`absolute top-0 left-0 bg-gray-900 p-8 rounded-lg shadow-lg flex items-stretch w-full transition-all duration-500 ${
-              currentIndex === index ? "z-10" : "z-0"
-            }`}
-            style={{
-              opacity: currentIndex === index ? 1 : 0,
-              transform:
-                currentIndex === index ? "translateX(0)" : "translateX(100%)",
-            }}>
-            <div className="flex flex-col justify-center items-center mr-6 w-1/2 relative h-full">
-              <img
-                src={project.images[imageIndex]}
-                alt={project.name}
-                className="object-cover w-full max-h-[80vh] rounded shadow-md"
-              />
-              <button
-                onClick={prevImage}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xl bg-gray-700 bg-opacity-60 hover:bg-opacity-80 rounded-full w-10 h-10 flex items-center justify-center">
-                ◀
-              </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xl bg-gray-700 bg-opacity-60 hover:bg-opacity-80 rounded-full w-10 h-10 flex items-center justify-center">
-                ▶
-              </button>
-            </div>
-            <div className="w-1/2">
-              <h2 className="text-3xl font-bold mb-4">{project.name}</h2>
-              <div className="text-base mb-4 overflow-auto max-h-[400px] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300">
-                {project.description}
+    <div className="min-h-screen bg-gradient-to-r from-gray-800 via-gray-900 to-black flex flex-col items-center justify-center text-white px-2 sm:px-4 py-10">
+      <h1 className="text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 text-center">
+        Projects
+      </h1>
+      <div className="relative w-full max-w-lg sm:max-w-3xl md:max-w-4xl mx-auto">
+        {/* Project Card (only current) */}
+        <div
+          ref={cardRef}
+          className="bg-gray-900 p-4 sm:p-8 rounded-lg shadow-lg w-full flex flex-col md:flex-row items-stretch">
+          {/* Image section */}
+          <div className="flex flex-col justify-center items-center mb-4 md:mb-0 md:mr-6 w-full md:w-1/2 relative">
+            <img
+              src={currentProject.images[imageIndex]}
+              alt={currentProject.name}
+              className="object-cover w-[200px] h-[260px] sm:w-[270px] sm:h-[340px] rounded shadow-md"
+            />
+            <button
+              onClick={prevImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xl bg-gray-700 bg-opacity-60 hover:bg-opacity-80 rounded-full w-8 h-8 flex items-center justify-center">
+              ◀
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xl bg-gray-700 bg-opacity-60 hover:bg-opacity-80 rounded-full w-8 h-8 flex items-center justify-center">
+              ▶
+            </button>
+          </div>
+          {/* Details section */}
+          <div className="w-full md:w-1/2 flex flex-col justify-between">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">
+                {currentProject.name}
+              </h2>
+              <div className="text-sm sm:text-base mb-4 overflow-auto max-h-[180px] sm:max-h-[340px] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 whitespace-pre-line">
+                {currentProject.description}
               </div>
               <p className="mb-2">
                 <a
-                  href={project.github}
+                  href={currentProject.github}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 hover:underline">
                   GitHub Repo
                 </a>
               </p>
-              <div className="flex flex-wrap mt-4">
-                {project.techStack.split(",").map((tech) => (
+              <div className="flex flex-wrap mt-2">
+                {currentProject.techStack.split(",").map((tech) => (
                   <span
                     key={tech}
-                    className="bg-gray-600 text-sm px-2 py-1 mr-2 mb-2 rounded">
-                    {tech}
+                    className="bg-gray-600 text-xs sm:text-sm px-2 py-1 mr-2 mb-2 rounded">
+                    {tech.trim()}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-        ))}
+        </div>
 
+        {/* Desktop/Tablet Project navigation (sides) */}
         <button
           onClick={prevProject}
-          className="absolute left-0 top-0 h-full w-16 flex items-center justify-center bg-gray-800 bg-opacity-50 hover:bg-opacity-70 transition-all duration-300 rounded-l-lg group -translate-x-full z-20"></button>
-
+          className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-gray-800 bg-opacity-50 hover:bg-opacity-70 transition-all duration-300 rounded-full group z-20">
+          <span className="text-2xl">❮</span>
+        </button>
         <button
           onClick={nextProject}
-          className="absolute right-0 top-0 h-full w-16 flex items-center justify-center bg-gray-800 bg-opacity-50 hover:bg-opacity-70 transition-all duration-300 rounded-r-lg group translate-x-full z-20"></button>
+          className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-gray-800 bg-opacity-50 hover:bg-opacity-70 transition-all duration-300 rounded-full group z-20">
+          <span className="text-2xl">❯</span>
+        </button>
+      </div>
+
+      {/* Mobile navigation below card */}
+      <div className="flex md:hidden justify-center gap-8 mt-4">
+        <button
+          onClick={prevProject}
+          className="flex items-center justify-center bg-gray-800 bg-opacity-70 hover:bg-opacity-90 rounded-full w-10 h-10">
+          <span className="text-xl">❮</span>
+        </button>
+        <button
+          onClick={nextProject}
+          className="flex items-center justify-center bg-gray-800 bg-opacity-70 hover:bg-opacity-90 rounded-full w-10 h-10">
+          <span className="text-xl">❯</span>
+        </button>
       </div>
     </div>
   );

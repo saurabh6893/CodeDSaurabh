@@ -76,24 +76,32 @@ const Skills = () => {
   }, []);
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-purple-900 text-white">
-      <h1 className="text-5xl font-bold mb-4">My Skills</h1>
-      <p className="text-xl mb-8">
+    <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-purple-900 text-white px-2 sm:px-4">
+      <h1 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-4 text-center">
+        My Skills
+      </h1>
+      <p className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-xl text-center">
         A collection of my technical skills and expertise honed through various
         projects and experiences.
       </p>
       <div
         ref={boxRef}
-        className="bg-gray-800 rounded-lg p-12 shadow-lg w-full max-w-4xl h-96 flex justify-center items-center">
-        <div className="flex flex-wrap gap-6 justify-center">
+        className="bg-gray-800 rounded-2xl p-3 sm:p-8 shadow-lg w-full max-w-3xl flex justify-center items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 w-full">
           {skills.map((skill, index) => (
             <div
               key={index}
               ref={(el) => {
                 skillsRef.current[index] = el;
               }}
-              className={`flex items-center bg-gray-700 rounded-full px-6 py-3 text-xl font-medium space-x-3 transition-colors duration-300 ${skill.color}`}>
-              <div className="text-3xl">{skill.icon}</div>
+              className={`
+                flex items-center justify-center
+                bg-gray-700 rounded-full
+                px-3 sm:px-6 py-2 sm:py-3
+                text-sm sm:text-lg font-medium space-x-2 transition-colors duration-300
+                ${skill.color}
+              `}>
+              <div className="text-2xl sm:text-3xl">{skill.icon}</div>
               <span>{skill.text}</span>
             </div>
           ))}

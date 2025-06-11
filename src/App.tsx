@@ -6,6 +6,7 @@ import WhatIKnowPage from "./Pages/WhatIKnowPage";
 import IntroSection from "./Pages/IntroSection";
 import Skills from "./Pages/Skills";
 import BlurredFooter from "./Pages/BlurredFooter";
+import Projects from "./Pages/Projects";
 const App = () => {
   return (
     <>
@@ -13,6 +14,7 @@ const App = () => {
       <HomePage />
       <IntroSection />
       <Skills />
+      <Projects />
       <WhatIKnowPage />
       <KeywordsPage />
       <BlurredFooter className=" text-center text-2xl md:text-3xl font-semibold" />

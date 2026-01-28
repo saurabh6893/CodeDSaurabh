@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
+
 
 interface BlurredFooterProps {
   className?: string;

@@ -7,9 +7,10 @@ import IntroSection from "./Pages/IntroSection";
 import Skills from "./Pages/Skills";
 import BlurredFooter from "./Pages/BlurredFooter";
 import Projects from "./Pages/Projects";
+import { ReactLenis } from "lenis/react";
 const App = () => {
   return (
-    <>
+    <ReactLenis root>
       <Header />
       <HomePage />
       <IntroSection />
@@ -18,7 +19,7 @@ const App = () => {
       <WhatIKnowPage />
       <KeywordsPage />
       <BlurredFooter className=" text-center text-2xl md:text-3xl font-semibold" />
-    </>
+    </ReactLenis>
   );
 };
 

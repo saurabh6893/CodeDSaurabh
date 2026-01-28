@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Project {
   id: string;
@@ -293,19 +298,31 @@ const ProjectCard: React.FC<{
 );
 
 const Projects = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const currentProject = projects[currentIndex];
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % projects.length);
-  };
-
-  const goToPrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  };
+  useGSAP(() => {
+    const panels = gsap.utils.toArray(".project-panel");
+    const totalPanels = panels.length;
+    
+    gsap.fromTo(panels, 
+      { xPercent: 0 },
+      {
+        xPercent: -100 * (totalPanels - 1),
+        ease: "none",
+        scrollTrigger: {
+            trigger: containerRef.current,
+            pin: true,
+            scrub: 1,
+            // Use functional value for end to support refresh
+            end: () => "+=" + (containerRef.current?.offsetWidth || window.innerWidth), 
+            snap: 1 / (totalPanels - 1), 
+            invalidateOnRefresh: true, // Crucial for horizontal scroll resizing
+        }
+    });
+  }, { scope: containerRef });
 
   const openModal = (project: Project) => {
     setSelectedProject(project);
@@ -319,75 +336,53 @@ const Projects = () => {
 
   return (
     <section
-      className="min-h-screen py-20 bg-gradient-to-br from-gray-900 via-teal-950 to-cyan-950"
-      id="projects">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-cyan-400">
-            Projects
-          </h1>
-          <span className="text-lg text-gray-400 font-semibold">
-            <span className="text-cyan-400 font-bold">{currentIndex + 1}</span>
-            <span className="text-gray-500"> / </span>
-            <span className="text-gray-400">{projects.length}</span>
-          </span>
+        ref={containerRef}
+        className="h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-teal-950 to-cyan-950 relative z-20"
+        id="projects">
+        
+        {/* Horizontal Container */}
+        <div ref={sliderRef} className="flex h-full w-[200%] sm:w-[200%]"> 
+            {/* Note: Width should be 100% * number of projects. We have 2 projects, so 200%. 
+                Dynamic width handling in production apps usually done via style={{ width: `${projects.length * 100}%` }}
+            */}
+            <style>{`.project-panel { width: 100vw; height: 100vh; flex-shrink: 0; }`}</style>
+            
+            {projects.map((project, index) => (
+                <div key={project.id} className="project-panel flex items-center justify-center p-4 sm:p-20 border-r border-gray-800/50">
+                    <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-10">
+                        {/* Image Side */}
+                        <div className="w-full md:w-1/2">
+                            <ProjectCard
+                                project={project}
+                                onClick={() => openModal(project)}
+                            />
+                        </div>
+                        
+                        {/* Text Side (Visible on large screens for context) */}
+                        <div className="hidden md:flex w-full md:w-1/2 flex-col text-left">
+                            <span className="text-cyan-400 font-bold text-xl mb-2">Project 0{index + 1}</span>
+                            <h2 className="text-5xl font-bold text-white mb-6">{project.title}</h2>
+                            <p className="text-gray-300 text-lg mb-8 line-clamp-4">{project.description}</p>
+                             <button
+                                onClick={() => openModal(project)}
+                                className="w-fit px-8 py-3 rounded-full bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition-colors">
+                                View Case Study
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ))}
         </div>
 
-        <div className="relative">
-          <div className="flex justify-center items-center">
-            <div className="w-full max-w-2xl">
-              <ProjectCard
-                project={currentProject}
-                onClick={() => openModal(currentProject)}
-              />
-            </div>
-          </div>
-
-          <button
-            onClick={goToPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-20 md:-translate-x-16 w-12 h-12 bg-cyan-900 border border-cyan-600 rounded-full flex items-center justify-center hover:bg-cyan-800 transition-all duration-300 text-white text-xl font-bold group hover:text-cyan-300">
-            ❮
-          </button>
-
-          <button
-            onClick={goToNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-20 md:translate-x-16 w-12 h-12 bg-cyan-900 border border-cyan-600 rounded-full flex items-center justify-center hover:bg-cyan-800 transition-all duration-300 text-white text-xl font-bold group hover:text-cyan-300">
-            ❯
-          </button>
+        <div className="absolute bottom-10 left-10 text-white opacity-50 pointer-events-none">
+            &larr; Scroll to explore &rarr;
         </div>
-
-        <div className="flex justify-center gap-3 mt-12">
-          {Array.from({ length: projects.length }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentIndex(i)}
-              className={`transition-all duration-300 rounded-full ${
-                i === currentIndex
-                  ? "w-8 h-3 bg-cyan-400"
-                  : "w-3 h-3 bg-cyan-800 border border-cyan-500 hover:bg-cyan-700"
-              }`}
-              aria-label={`Go to project ${i + 1}`}
-              aria-current={i === currentIndex ? "page" : undefined}
-            />
-          ))}
-        </div>
-      </div>
 
       <ProjectModal
         project={selectedProject}
         isOpen={isModalOpen}
         onClose={closeModal}
       />
-
-      <style>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 };
